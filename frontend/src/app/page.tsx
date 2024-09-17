@@ -1,7 +1,9 @@
-import React from "react";
+import UploadForm from "../components/UploadForm";
 
-const HomePage = () => {
-  return <div>HomePage</div>;
-};
+const Home: React.FC = () => (
+  <main>
+    <UploadForm />
+  </main>
+);
 
-export default HomePage;
+export default Home;
