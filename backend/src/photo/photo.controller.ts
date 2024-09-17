@@ -6,6 +6,9 @@ import {
   UseInterceptors,
   UploadedFile,
   Body,
+  HttpException,
+  Delete,
+  HttpStatus,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { PhotoService } from './photo.service';
@@ -51,25 +54,49 @@ export class PhotoController {
   @Get()
   async getAllPhotos() {
     const photos = await this.photoService.findAllPhotos();
-    return photos.map((photo) => ({
-      id: photo.id,
-      filename: photo.filename,
-      filepath: `http://localhost:8000/uploads/${photo.filename}`,
-      description: photo.description,
-      createdAt: photo.createdAt,
-    }));
+    return {
+      message: 'Successfully get All Photos',
+      data: photos.map((photo) => ({
+        id: photo.id,
+        filename: photo.filename,
+        filepath: `http://localhost:8000/uploads/${encodeURIComponent(photo.filename)}`, // Encode filename to handle spaces
+        description: photo.description,
+        createdAt: photo.createdAt,
+      })),
+    };
   }
 
   // Retrieve a photo by ID
   @Get(':id')
   async getPhotoById(@Param('id') id: string) {
     const photo = await this.photoService.findPhotoById(id);
+    if (!photo) {
+      throw new HttpException('Photo not found', HttpStatus.NOT_FOUND);
+    }
+
     return {
-      id: photo.id,
-      filename: photo.filename,
-      filepath: `http://localhost:8000/uploads/${photo.filename}`,
-      description: photo.description,
-      createdAt: photo.createdAt,
+      message: 'Successfully retrieved photo',
+      data: {
+        id: photo.id,
+        filename: photo.filename,
+        filepath: `http://localhost:8000/uploads/${encodeURIComponent(photo.filename)}`, // Encode filename for spaces
+        description: photo.description,
+        createdAt: photo.createdAt
+      }
     };
+  }
+
+  // Delete a photo by ID
+  @Delete(':id')
+  async deletePhoto(@Param('id') id: string) {
+    try {
+      const result = await this.photoService.deletePhoto(id);
+      return result;
+    } catch {
+      throw new HttpException(
+        'Photo not found or delete failed',
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 }

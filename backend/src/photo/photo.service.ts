@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Photo } from './photo.schema';
+import { unlink } from 'fs/promises';
 
 @Injectable()
 export class PhotoService {
@@ -25,5 +26,16 @@ export class PhotoService {
   // get Photo by ID
   async findPhotoById(id: string): Promise<Photo> {
     return this.photoModel.findById(id).exec();
+  }
+
+  // Delete Photo
+  async deletePhoto(id: string): Promise<{ message: string }> {
+    const photo = await this.photoModel.findById(id);
+    if (!photo) {
+      throw new Error('Photo not found');
+    }
+    await unlink(photo.filepath);
+    await this.photoModel.deleteOne({ _id: id });
+    return { message: 'Photo deleted successfully' };
   }
 }
