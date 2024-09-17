@@ -25,3 +25,20 @@ body {
     text-wrap: balance;
   }
 }
+
+input[type="file"] {
+  opacity: 0;
+  width: 0.1px;
+  height: 0.1px;
+  position: absolute;
+  z-index: -1;
+}
+
+label[for="file-upload"] {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #4400cb;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
