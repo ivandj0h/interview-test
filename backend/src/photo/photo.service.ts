@@ -7,8 +7,23 @@ import { Photo } from './photo.schema';
 export class PhotoService {
   constructor(@InjectModel(Photo.name) private photoModel: Model<Photo>) {}
 
-  async savePhoto(filename: string, filepath: string): Promise<Photo> {
-    const newPhoto = new this.photoModel({ filename, filepath });
+  // Save Photo
+  async savePhoto(
+    filename: string,
+    filepath: string,
+    description?: string,
+  ): Promise<Photo> {
+    const newPhoto = new this.photoModel({ filename, filepath, description });
     return newPhoto.save();
+  }
+
+  // Get All Photos
+  async findAllPhotos(): Promise<Photo[]> {
+    return this.photoModel.find().exec();
+  }
+
+  // get Photo by ID
+  async findPhotoById(id: string): Promise<Photo> {
+    return this.photoModel.findById(id).exec();
   }
 }
