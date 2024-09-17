@@ -9,6 +9,9 @@ export class Photo extends Document {
   @Prop({ required: true })
   filepath: string;
 
+  @Prop()
+  description?: string;
+
   @Prop({ default: Date.now })
   createdAt: Date;
 }
