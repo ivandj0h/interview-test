@@ -10,6 +10,13 @@ async function bootstrap() {
     prefix: '/uploads/',
   });
 
+  // Enable CORS
+  app.enableCors({
+    origin: 'http://localhost:3000', 
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
+
   await app.listen(8000);
 }
 bootstrap();
