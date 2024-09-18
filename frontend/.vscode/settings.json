@@ -1,5 +1,11 @@
 {
     "cSpell.words": [
-        "Toastify"
-    ]
+      "alphacoders",
+      "Aroney",
+      "avatarfiles",
+      "Toastify"
+    ],
+  "css.validate": false,
+  "scss.validate": false,
+  "less.validate": false
 }
