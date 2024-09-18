@@ -65,8 +65,8 @@ A web application that allows users to upload images from their computer, crop t
 
    ```
 
-
 ## Screen Shoot
+
 ![crop](/frontend/public/images/crop.png)
 
 ### Author
