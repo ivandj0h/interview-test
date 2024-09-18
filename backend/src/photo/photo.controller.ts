@@ -22,38 +22,6 @@ import * as fs from 'fs/promises';
 export class PhotoController {
   constructor(private readonly photoService: PhotoService) {}
 
-  // @Post('upload')
-  // @UseInterceptors(
-  //   FileInterceptor('file', {
-  //     storage: diskStorage({
-  //       destination: './uploads',
-  //       filename: (req, file, cb) => {
-  //         const randomName = Array(32)
-  //           .fill(null)
-  //           .map(() => ((Math.random() * 16) | 0).toString(16))
-  //           .join('');
-  //         cb(null, `${randomName}${extname(file.originalname)}`);
-  //       },
-  //     }),
-  //   }),
-  // )
-
-  
-  // async uploadPhoto(
-  //   @UploadedFile() file: Express.Multer.File,
-  //   @Body() createPhotoDto: CreatePhotoDto,
-  // ) {
-  //   const photo = await this.photoService.savePhoto(
-  //     createPhotoDto.filename,
-  //     file.path,
-  //     createPhotoDto.description,
-  //   );
-  //   return {
-  //     message: 'Foto berhasil diupload',
-  //     photo,
-  //   };
-  // }
-
   @Post('upload')
   @UseInterceptors(
     FileInterceptor('file', {
