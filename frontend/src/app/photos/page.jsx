@@ -28,6 +28,12 @@ const PhotosPage = () => {
   return (
     <>
       <Navbar />
+      <div className="flex items-center justify-center bg-gray-100 dark:bg-gray-800 transition-colors duration-300 ">
+        <h3 className="text-gray-900 dark:text-white text-2xl mt-5">
+          Lists Of Photos
+        </h3>
+      </div>
+
       <div className="photos-container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 bg-gray-100 dark:bg-gray-800 transition-colors duration-300 min-h-screen">
         {photos.map((photo) => (
           <PhotoCard
