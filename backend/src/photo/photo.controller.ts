@@ -15,10 +15,44 @@ import { PhotoService } from './photo.service';
 import { CreatePhotoDto } from './dto/create-photo.dto';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import * as fs from 'fs/promises';
+
 
 @Controller('photos')
 export class PhotoController {
   constructor(private readonly photoService: PhotoService) {}
+
+  // @Post('upload')
+  // @UseInterceptors(
+  //   FileInterceptor('file', {
+  //     storage: diskStorage({
+  //       destination: './uploads',
+  //       filename: (req, file, cb) => {
+  //         const randomName = Array(32)
+  //           .fill(null)
+  //           .map(() => ((Math.random() * 16) | 0).toString(16))
+  //           .join('');
+  //         cb(null, `${randomName}${extname(file.originalname)}`);
+  //       },
+  //     }),
+  //   }),
+  // )
+
+  
+  // async uploadPhoto(
+  //   @UploadedFile() file: Express.Multer.File,
+  //   @Body() createPhotoDto: CreatePhotoDto,
+  // ) {
+  //   const photo = await this.photoService.savePhoto(
+  //     createPhotoDto.filename,
+  //     file.path,
+  //     createPhotoDto.description,
+  //   );
+  //   return {
+  //     message: 'Foto berhasil diupload',
+  //     photo,
+  //   };
+  // }
 
   @Post('upload')
   @UseInterceptors(
@@ -26,14 +60,11 @@ export class PhotoController {
       storage: diskStorage({
         destination: './uploads',
         filename: (req, file, cb) => {
-          const randomName = Array(32)
-            .fill(null)
-            .map(() => ((Math.random() * 16) | 0).toString(16))
-            .join('');
+          const randomName = Array(32).fill(null).map(() => ((Math.random() * 16) | 0).toString(16)).join('');
           cb(null, `${randomName}${extname(file.originalname)}`);
         },
       }),
-    }),
+    })
   )
   async uploadPhoto(
     @UploadedFile() file: Express.Multer.File,
@@ -44,11 +75,26 @@ export class PhotoController {
       file.path,
       createPhotoDto.description,
     );
+    
+    const newFilename = `${photo._id}${extname(file.originalname)}`;
+    const newPath = `./uploads/${newFilename}`;
+  
+    // Pindahkan/rename file
+    await fs.rename(file.path, newPath);
+  
+    // Update path file di database
+    await this.photoService.updatePhotoPath(photo._id as string, newPath);
+  
     return {
       message: 'Foto berhasil diupload',
-      photo,
+      photo: {
+        ...photo.toObject(),
+        filepath: newPath,
+      },
     };
   }
+  
+
 
   // Retrieve all photos
   @Get()
@@ -59,7 +105,7 @@ export class PhotoController {
       data: photos.map((photo) => ({
         id: photo.id,
         filename: photo.filename,
-        filepath: `http://localhost:8000/uploads/${encodeURIComponent(photo.filename)}`, // Encode filename to handle spaces
+        filepath: `http://localhost:8000/uploads/${encodeURIComponent(photo.id)}.jpg`, // Encode filename to handle spaces
         description: photo.description,
         createdAt: photo.createdAt,
       })),
