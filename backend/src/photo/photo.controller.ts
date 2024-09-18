@@ -17,7 +17,6 @@ import { diskStorage } from 'multer';
 import { extname } from 'path';
 import * as fs from 'fs/promises';
 
-
 @Controller('photos')
 export class PhotoController {
   constructor(private readonly photoService: PhotoService) {}
@@ -28,11 +27,14 @@ export class PhotoController {
       storage: diskStorage({
         destination: './uploads',
         filename: (req, file, cb) => {
-          const randomName = Array(32).fill(null).map(() => ((Math.random() * 16) | 0).toString(16)).join('');
+          const randomName = Array(32)
+            .fill(null)
+            .map(() => ((Math.random() * 16) | 0).toString(16))
+            .join('');
           cb(null, `${randomName}${extname(file.originalname)}`);
         },
       }),
-    })
+    }),
   )
   async uploadPhoto(
     @UploadedFile() file: Express.Multer.File,
@@ -43,16 +45,16 @@ export class PhotoController {
       file.path,
       createPhotoDto.description,
     );
-    
+
     const newFilename = `${photo._id}${extname(file.originalname)}`;
     const newPath = `./uploads/${newFilename}`;
-  
+
     // Pindahkan/rename file
     await fs.rename(file.path, newPath);
-  
+
     // Update path file di database
     await this.photoService.updatePhotoPath(photo._id as string, newPath);
-  
+
     return {
       message: 'Foto berhasil diupload',
       photo: {
@@ -61,8 +63,6 @@ export class PhotoController {
       },
     };
   }
-  
-
 
   // Retrieve all photos
   @Get()
@@ -73,7 +73,7 @@ export class PhotoController {
       data: photos.map((photo) => ({
         id: photo.id,
         filename: photo.filename,
-        filepath: `http://localhost:8000/uploads/${encodeURIComponent(photo.id)}.jpg`, // Encode filename to handle spaces
+        filepath: `http://localhost:8000/uploads/${encodeURIComponent(photo.id)}.jpg`,
         description: photo.description,
         createdAt: photo.createdAt,
       })),
@@ -93,10 +93,10 @@ export class PhotoController {
       data: {
         id: photo.id,
         filename: photo.filename,
-        filepath: `http://localhost:8000/uploads/${encodeURIComponent(photo.filename)}`, // Encode filename for spaces
+        filepath: `http://localhost:8000/uploads/${encodeURIComponent(photo.id)}.jpg`,
         description: photo.description,
-        createdAt: photo.createdAt
-      }
+        createdAt: photo.createdAt,
+      },
     };
   }
 

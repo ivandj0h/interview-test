@@ -13,7 +13,8 @@ export class AppController {
   @Get()
   getRoot() {
     return {
-      message: 'Welcome to the NestJS Application. Please visit /api for API endpoints.',
+      message:
+        'Welcome to the NestJS Application. Please visit /api for API endpoints.',
     };
   }
 }
