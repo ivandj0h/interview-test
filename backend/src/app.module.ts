@@ -6,7 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost:27017/photo-upload-db'), // URL database lo
+    MongooseModule.forRoot('mongodb://localhost:27017/photo-upload-db'), 
     PhotoModule,
   ],
   controllers: [AppController],

@@ -10,6 +10,8 @@ async function bootstrap() {
     prefix: '/uploads/',
   });
 
+  app.setGlobalPrefix('api');
+
   // Enable CORS
   app.enableCors({
     origin: 'http://localhost:3000',

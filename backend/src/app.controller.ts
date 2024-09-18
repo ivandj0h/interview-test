@@ -9,4 +9,11 @@ export class AppController {
   getWelcomeMessage(): string {
     return this.appService.getWelcomeMessage();
   }
+
+  @Get()
+  getRoot() {
+    return {
+      message: 'Welcome to the NestJS Application. Please visit /api for API endpoints.',
+    };
+  }
 }

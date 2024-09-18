@@ -7,21 +7,53 @@
   --foreground: #171717;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html.dark :root {
+  --background: #0a0a0a;
+  --foreground: #ededed;
 }
 
 body {
   color: var(--foreground);
-  background: var(--background);
+  background-color: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.photos-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.photo-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  height: auto;
+  max-height: 400px; /* Batas maksimal tinggi card */
+  display: flex;
+  flex-direction: column;
+}
+
+.photo-card img {
+  width: 100%;
+  height: auto; /* Sesuaikan atau batasi tinggi */
+  object-fit: cover; /* Pastikan gambar menyesuaikan dengan baik dan tidak meregang */
+  max-height: 300px; /* Contoh batas tinggi */
+}
+
+.photo-card div {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Ratakan konten */
+  flex-grow: 1; /* Biarkan konten mengisi ruang yang tersedia */
 }
