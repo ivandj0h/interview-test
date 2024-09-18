@@ -17,8 +17,8 @@ const Profile = () => {
     const blob = await responseBlob.blob();
 
     formData.append("file", blob, "avatar.jpg");
-    formData.append("filename", "avatar.jpg");
-    formData.append("description", "Updated avatar");
+    formData.append("filename", photoData.filename || "avatar.jpg");
+    formData.append("description", photoData.description || "Updated avatar");
 
     try {
       const response = await fetch("http://localhost:8000/api/photos/upload", {
@@ -30,34 +30,19 @@ const Profile = () => {
 
       avatarRef.current = data.photo.filepath;
       toast.success("Avatar updated successfully!");
+
+      // Tutup modal
       setModalOpen(false);
+
+      // Redirect setelah 2 detik
+      setTimeout(() => {
+        window.location.href = "http://localhost:3000/photos";
+      }, 2000); // 2 detik delay
     } catch (error) {
       console.error("Error uploading new avatar:", error);
       toast.error("Failed to update avatar");
     }
   };
-
-  useEffect(() => {
-    const fetchPhotoData = async () => {
-      try {
-        const response = await fetch(
-          "http://localhost:8000/api/photos/66ea74f13e06e05666cd7944"
-        );
-        if (!response.ok) throw new Error("Failed to fetch the photo data");
-        const data = await response.json();
-        setPhotoData({
-          filename: data.data.filename,
-          description: data.data.description,
-        });
-        avatarRef.current = data.data.filepath;
-      } catch (error) {
-        console.error("Error fetching photo data:", error);
-        toast.error("Failed to fetch avatar data");
-      }
-    };
-
-    // fetchPhotoData();
-  }, []);
 
   return (
     <>
@@ -83,12 +68,48 @@ const Profile = () => {
             <PencilIcon className="text-gray-700 dark:text-white" />
           </button>
         </div>
-        <h2 className="text-gray-900 dark:text-white font-bold mt-6">
-          {photoData.filename}
-        </h2>
-        <p className="text-gray-500 dark:text-gray-300 text-xs mt-2">
-          {photoData.description}
-        </p>
+
+        {/* Form Section */}
+        <div className="mt-6 w-full max-w-xs">
+          <div className="mb-4">
+            <label
+              htmlFor="filename"
+              className="block text-gray-900 dark:text-white text-sm font-bold mb-2"
+            >
+              Filename
+            </label>
+            <input
+              type="text"
+              id="filename"
+              placeholder="Username"
+              value={photoData.filename}
+              onChange={(e) =>
+                setPhotoData({ ...photoData, filename: e.target.value })
+              }
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-white leading-tight focus:outline-none focus:shadow-outline bg-gray-100 dark:bg-gray-700"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label
+              htmlFor="description"
+              className="block text-gray-900 dark:text-white text-sm font-bold mb-2"
+            >
+              Description
+            </label>
+            <textarea
+              id="description"
+              placeholder="Enter description"
+              value={photoData.description}
+              onChange={(e) =>
+                setPhotoData({ ...photoData, description: e.target.value })
+              }
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-white leading-tight focus:outline-none focus:shadow-outline bg-gray-100 dark:bg-gray-700"
+              rows="3"
+            ></textarea>
+          </div>
+        </div>
+
         {modalOpen && (
           <Modal
             updateAvatar={updateAvatar}
