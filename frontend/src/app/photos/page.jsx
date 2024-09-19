@@ -33,6 +33,7 @@ const PhotosPage = () => {
           Lists Of Photos
         </h3>
       </div>
+      <hr />
 
       <div className="photos-container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 bg-gray-100 dark:bg-gray-800 transition-colors duration-300 min-h-screen">
         {photos.map((photo) => (
