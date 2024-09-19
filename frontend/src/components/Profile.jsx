@@ -76,7 +76,7 @@ const Profile = () => {
               htmlFor="filename"
               className="block text-gray-900 dark:text-white text-sm font-bold mb-2"
             >
-              Filename
+              Username
             </label>
             <input
               type="text"
