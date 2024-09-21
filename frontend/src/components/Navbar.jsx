@@ -12,7 +12,7 @@ export default function Navbar() {
     if (storedTheme) {
       setTheme(storedTheme);
       document.documentElement.classList.add(storedTheme);
-    }
+    } 
   }, []);
 
   const toggleTheme = () => {
